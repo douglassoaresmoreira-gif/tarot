@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultório de Tarot Profundo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .menu-icon {
+            font-size: 2em;
+        }
+
+        .question-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .question-section h2 {
+            margin-bottom: 15px;
+            color: #feca57;
+        }
+
+        #questionInput {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .reading-section {
+            display: none;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: #feca57;
+            transform: translateY(-5px);
+        }
+
+        .card.selected {
+            border-color: #48dbfb;
+            background: rgba(72, 219, 251, 0.2);
+        }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .card-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #feca57;
+        }
+
+        .card-position {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .interpretation {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .interpretation h2 {
+            color: #48dbfb;
+            margin-bottom: 15px;
+        }
+
+        .sim-nao-result {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-sim {
+            border-color: #00b894;
+        }
+
+        .result-nao {
+            border-color: #ff6b6b;
+        }
+
+        .result-talvez {
+            border-color: #feca57;
+        }
+
+        .result-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .result-text {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: scale(1.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+
+        .tarot-symbols {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        .energy-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .energy-positive {
+            background: rgba(0, 184, 148, 0.3);
+            border: 1px solid #00b894;
+        }
+
+        .energy-challenging {
+            background: rgba(255, 107, 107, 0.3);
+            border: 1px solid #ff6b6b;
+        }
+
+        .energy-balanced {
+            background: rgba(254, 202, 87, 0.3);
+            border: 1px solid #feca57;
+        }
+
+        .energy-neutral {
+            background: rgba(116, 125, 140, 0.3);
+            border: 1px solid #747d8c;
+        }
+
+        @media (max-width: 768px) {
+            .menu {
+                grid-template-columns: 1fr;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔮 Consultório de Tarot Profundo</h1>
+            <p>Descubra os mistérios que o universo reserva para você</p>
+        </div>
+
+        <div class="menu">
+            <button class="menu-btn" onclick="selecionarTipoLeitura('completa')">
+                <span class="menu-icon">🎴</span>
+                <span>Leitura Completa<br><small>3 cartas - Análise profunda</small></span>
+            </button>
+            <button class="menu-btn" onclick="selecionarTipoLeitura('simnao')">
+                <span class="menu-icon">🎯</span>
+                <span>Resposta Sim/Não<br><small>1 carta - Resposta direta</small></span>
+            </button>
+        </div>
+
+        <div id="questionSection" class="question-section" style="display: none;">
+            <h2>📝 Faça sua pergunta ao tarot</h2>
+            <input type="text" id="questionInput" placeholder="Ex: Devo mudar de emprego? Como será meu relacionamento?..." maxlength="100">
+            <button class="submit-btn" onclick="iniciarLeitura()">🔮 Realizar Leitura</button>
+        </div>
+
+        <div id="loadingSection" class="loading" style="display: none;">
+            <div class="tarot-symbols">🔮✨🌟</div>
+            <p>Conectando com os arcanos...</p>
+            <div class="tarot-symbols">🌟✨🔮</div>
+        </div>
+
+        <div id="readingSection" class="reading-section">
+            <!-- Conteúdo da leitura será inserido aqui via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        class TarotProfundo {
+            constructor() {
+                this.baralhoCompleto = [
+                    {
+                        nome: "O Louco", numero: 0, tipo: "maior",
+                        explicacao: "Representa novos começos, aventura, liberdade e espontaneidade. É um chamado para seguir seu coração sem medo das consequências.",
+                        sim_nao: "sim", detalhe_sim_nao: "Mas proceda com cautela e esteja aberto ao inesperado",
+                        significado: "início, inocência, liberdade, potencial"
+                    },
+                    {
+                        nome: "O Mago", numero: 1, tipo: "maior",
+                        explicacao: "Poder de manifestação, habilidade de criar sua realidade. Use seus recursos e talentos com sabedoria.",
+                        sim_nao: "sim", detalhe_sim_nao: "Você tem todas as ferramentas necessárias",
+                        significado: "poder, manifestação, recursos, vontade"
+                    },
+                    {
+                        nome: "A Sacerdotisa", numero: 2, tipo: "maior",
+                        explicacao: "Intuição, mistério, sabedoria interior. Confie no que não pode ser visto mas é sentido profundamente.",
+                        sim_nao: "talvez", detalhe_sim_nao: "A resposta está dentro de você, escute sua intuição",
+                        significado: "intuição, mistério, sabedoria, subconsciente"
+                    },
+                    {
+                        nome: "A Imperatriz", numero: 3, tipo: "maior",
+                        explicacao: "Fertilidade, criatividade, abundância material. Conexão com a natureza e os prazeres da vida.",
+                        sim_nao: "sim", detalhe_sim_nao: "É um momento fértil para novos projetos",
+                        significado: "fertilidade, criatividade, abundância, natureza"
+                    },
+                    {
+                        nome: "O Imperador", numero: 4, tipo: "maior",
+                        explicacao: "Autoridade, estrutura, controle e estabilidade. Poder através da disciplina e organização.",
+                        sim_nao: "sim", detalhe_sim_nao: "Desde que você estabeleça estrutura e controle",
+                        significado: "autoridade, estrutura, controle, poder"
+                    },
+                    {
+                        nome: "O Hierofante", numero: 5, tipo: "maior",
+                        explicacao: "Tradição, espiritualidade, ensinamentos. Busque significado em sistemas estabelecidos.",
+                        sim_nao: "sim", detalhe_sim_nao: "Seguindo tradições ou conselhos sábios",
+                        significado: "tradição, espiritualidade, ensino, crenças"
+                    },
+                    {
+                        nome: "Os Enamorados", numero: 6, tipo: "maior",
+                        explicacao: "Amor, escolhas, relacionamentos e valores. Decisões importantes do coração estão em jogo.",
+                        sim_nao: "sim", detalhe_sim_nao: "Mas você precisará fazer uma escolha importante",
+                        significado: "amor, escolhas, relacionamentos, valores"
+                    },
+                    {
+                        nome: "O Carro", numero: 7, tipo: "maior",
+                        explicacao: "Determinação, progresso, vitória através do controle das forças opostas.",
+                        sim_nao: "sim", detalhe_sim_nao: "Avance com determinação e controle",
+                        significado: "determinação, progresso, vitória, controle"
+                    },
+                    {
+                        nome: "A Força", numero: 8, tipo: "maior",
+                        explicacao: "Coragem, paciência, compaixão. Força interior para dominar impulsos através da suavidade.",
+                        sim_nao: "sim", detalhe_sim_nao: "Use a força interior, não a força bruta",
+                        significado: "coragem, paciência, força interior, compaixão"
+                    },
+                    {
+                        nome: "O Eremita", numero: 9, tipo: "maior",
+                        explicacao: "Introspecção, sabedoria, solidão produtiva. Momento de reflexão profunda.",
+                        sim_nao: "não", detalhe_sim_nao: "É momento de reflexão, não de ação",
+                        significado: "introspecção, sabedoria, solidão, reflexão"
+                    },
+                    {
+                        nome: "A Roda da Fortuna", numero: 10, tipo: "maior",
+                        explicacao: "Ciclos, destino, mudanças inevitáveis. A roda gira trazendo novos ciclos.",
+                        sim_nao: "talvez", detalhe_sim_nao: "Depende dos ciclos do destino que estão em movimento",
+                        significado: "ciclos, destino, mudanças, sorte"
+                    },
+                    {
+                        nome: "A Justiça", numero: 11, tipo: "maior",
+                        explicacao: "Equilíbrio, verdade, consequências. Suas ações terão seus devidos resultados.",
+                        sim_nao: "sim", detalhe_sim_nao: "Desde que suas intenções sejam justas",
+                        significado: "equilíbrio, justiça, consequências, verdade"
+                    },
+                    {
+                        nome: "O Pendurado", numero: 12, tipo: "maior",
+                        explicacao: "Sacrifício, nova perspectiva, pausa necessária. Ver as coisas de ângulo diferente.",
+                        sim_nao: "não", detalhe_sim_nao: "É momento de pausa e nova perspectiva, não de ação",
+                        significado: "sacrifício, perspectiva, pausa, rendição"
+                    },
+                    {
+                        nome: "A Morte", numero: 13, tipo: "maior",
+                        explicacao: "Fim de ciclo, transformação profunda, renovação necessária.",
+                        sim_nao: "não", detalhe_sim_nao: "Algo precisa terminar antes que algo novo comece",
+                        significado: "transformação, fim, renovação, liberação"
+                    },
+                    {
+                        nome: "A Temperança", numero: 14, tipo: "maior",
+                        explicacao: "Moderação, cura, equilíbrio. Encontre harmonia misturando elementos opostos.",
+                        sim_nao: "sim", detalhe_sim_nao: "Desde que você busque equilíbrio e moderação",
+                        significado: "moderação, cura, equilíbrio, paciência"
+                    },
+                    {
+                        nome: "O Diabo", numero: 15, tipo: "maior",
+                        explicacao: "Tentação, limitações, vícios. Examine o que o prende e busque libertação.",
+                        sim_nao: "não", detalhe_sim_nao: "Cuidado com tentações e limitações autoimpostas",
+                        significado: "tentação, limitação, vício, materialismo"
+                    },
+                    {
+                        nome: "A Torre", numero: 16, tipo: "maior",
+                        explicacao: "Mudança brusca, revelação, libertação através do caos.",
+                        sim_nao: "não", detalhe_sim_nao: "Mudanças drásticas estão por vir, prepare-se",
+                        significado: "mudança brusca, revelação, libertação, crise"
+                    },
+                    {
+                        nome: "A Estrela", numero: 17, tipo: "maior",
+                        explicacao: "Esperança, inspiração, serenidade. Tempo de cura e confiança no futuro.",
+                        sim_nao: "sim", detalhe_sim_nao: "Mantenha a esperança e fé no futuro",
+                        significado: "esperança, inspiração, cura, fé"
+                    },
+                    {
+                        nome: "A Lua", numero: 18, tipo: "maior",
+                        explicacao: "Intuição, ilusão, incerteza. Confie em seus sonhos e instintos noturnos.",
+                        sim_nao: "talvez", detalhe_sim_nao: "As coisas não são o que parecem, proceda com cautela",
+                        significado: "intuição, ilusão, incerteza, subconsciente"
+                    },
+                    {
+                        nome: "O Sol", numero: 19, tipo: "maior",
+                        explicacao: "Alegria, sucesso, vitalidade. Momento de otimismo e realização positiva.",
+                        sim_nao: "sim", detalhe_sim_nao: "Sim! Sucesso e alegria estão garantidos",
+                        significado: "alegria, sucesso, vitalidade, verdade"
+                    },
+                    {
+                        nome: "O Julgamento", numero: 20, tipo: "maior",
+                        explicacao: "Renascimento, clareza, chamado interior. Despertar para novo propósito de vida.",
+                        sim_nao: "sim", detalhe_sim_nao: "Desde que você responda ao chamado interior",
+                        significado: "renascimento, clareza, propósito, avaliação"
+                    },
+                    {
+                        nome: "O Mundo", numero: 21, tipo: "maior",
+                        explicacao: "Completude, realização, viagem. Ciclo se fecha com sucesso e novos começos.",
+                        sim_nao: "sim", detalhe_sim_nao: "Sim! Um ciclo se completa com sucesso",
+                        significado: "completude, realização, sucesso, totalidade"
+                    }
+                ];
+
+                this.posicoesProfundas = [
+                    "A ESSÊNCIA da situação (O que realmente está acontecendo)",
+                    "O DESAFIO atual (O que precisa ser superado)",
+                    "A DIREÇÃO ou RESULTADO (Para onde isso está levando)"
+                ];
+            }
+
+            tirarCartas(quantidade = 3) {
+                const embaralhado = [...this.baralhoCompleto].sort(() => Math.random() - 0.5);
+                return embaralhado.slice(0, quantidade);
+            }
+
+            analisarEnergiaGeral(cartas) {
+                const positivas = ["O Sol", "O Mundo", "A Estrela", "A Imperatriz", "O Mago"];
+                const desafiadoras = ["A Torre", "A Morte", "O Diabo", "O Pendurado"];
+                
+                const countPositivas = cartas.filter(carta => positivas.includes(carta.nome)).length;
+                const countDesafiadoras = cartas.filter(carta => desafiadoras.includes(carta.nome)).length;
+                
+                if (countPositivas >= 2) return {texto: "Muito positiva - tempos de crescimento e sucesso", classe: "energy-positive"};
+                if (countDesafiadoras >= 2) return {texto: "Desafiadora - período de transformação e aprendizado", classe: "energy-challenging"};
+                if (countPositivas === 1 && countDesafiadoras === 1) return {texto: "Equilibrada - mistura de desafios e oportunidades", classe: "energy-balanced"};
+                return {texto: "Neutra - momento de transição e reflexão", classe: "energy-neutral"};
+            }
+        }
+
+        // Variáveis globais
+        let tarot = new TarotProfundo();
+        let tipoLeituraAtual = '';
+        let cartasAtuais = [];
+        let perguntaAtual = '';
+
+        function selecionarTipoLeitura(tipo) {
+            tipoLeituraAtual = tipo;
+            document.getElementById('questionSection').style.display = 'block';
+            document.getElementById('questionInput').focus();
+        }
+
+        function iniciarLeitura() {
+            const pergunta = document.getElementById('questionInput').value.trim();
+            perguntaAtual = pergunta || 'Minha jornada e caminho pessoal';
+            
+            document.getElementById('questionSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('readingSection').style.display = 'block';
+                
+                if (tipoLeituraAtual === 'completa') {
+                    exibirLeituraCompleta();
+                } else {
+                    exibirLeituraSimNao();
+                }
+            }, 2000);
+        }
+
+        function exibirLeituraCompleta() {
+            cartasAtuais = tarot.tirarCartas(3);
+            const energia = tarot.analisarEnergiaGeral(cartasAtuais);
+            
+            let html = `
+                <div class="interpretation">
+                    <h2>🔮 Leitura Completa de Tarot</h2>
+                    <p><strong>📖 Pergunta:</strong> ${perguntaAtual}</p>
+                    <p><strong>📅 Data:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+                    <div class="energy-badge ${energia.classe}">${energia.texto}</div>
+                </div>
+                
+                <div class="cards-container">
+            `;
+            
+            cartasAtuais.forEach((carta, index) => {
+                html += `
+                    <div class="card" onclick="mostrarDetalhesCarta(${index})">
+                        <div class="card-icon">🎴</div>
+                        <div class="card-name">${carta.nome}</div>
+                        <div class="card-position">${tarot.posicoesProfundas[index]}</div>
+                        <div class="card-desc">Clique para ver detalhes</div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            html += `
+                <div class="interpretation">
+                    <h2>✨ Interpretação Profunda</h2>
+                    <p>${gerarInterpretacaoProfunda(cartasAtuais, perguntaAtual)}</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="novaLeitura()">🔄 Nova Leitura</button>
+                    <button class="action-btn btn-secondary" onclick="voltarMenu()">🏠 Voltar ao Menu</button>
+                </div>
+            `;
+            
+            document.getElementById('readingSection').innerHTML = html;
+        }
+
+        function exibirLeituraSimNao() {
+            const carta = tarot.tirarCartas(1)[0];
+            const resposta = carta.sim_nao.toUpperCase();
+            
+            let classeResultado = '';
+            let icone = '';
+            
+            if (resposta === 'SIM') {
+                classeResultado = 'result-sim';
+                icone = '🟢';
+            } else if (resposta === 'NÃO') {
+                classeResultado = 'result-nao';
+                icone = '🔴';
+            } else {
+                classeResultado = 'result-talvez';
+                icone = '🟡';
+            }
+            
+            const html = `
+                <div class="sim-nao-result ${classeResultado}">
+                    <div class="result-icon">${icone}</div>
+                    <div class="result-text">${resposta}</div>
+                    <p><strong>${carta.detalhe_sim_nao}</strong></p>
+                </div>
+                
+                <div class="interpretation">
+                    <h2>🎴 ${carta.nome}</h2>
+                    <p><strong>📚 Explicação:</strong> ${carta.explicacao}</p>
+                    <p><strong>🌟 Mensagem Específica:</strong> ${gerarMensagemSimNao(carta, perguntaAtual)}</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn btn-primary" onclick="novaLeitura()">🔄 Nova Leitura</button>
+                    <button class="action-btn btn-secondary" onclick="voltarMenu()">🏠 Voltar ao Menu</button>
+                </div>
+            `;
+            
+            document.getElementById('readingSection').innerHTML = html;
+        }
+
+        function mostrarDetalhesCarta(index) {
+            const carta = cartasAtuais[index];
+            const posicao = tarot.posicoesProfundas[index];
+            
+            const html = `
+                <div class="interpretation">
+                    <h2>🎴 ${carta.nome}</h2>
+                    <p><strong>📋 Posição:</strong> ${posicao}</p>
+                    <p><strong>📚 Explicação:</strong> ${carta.explicacao}</p>
+                    <p><strong>🔮 Resposta Sim/Não:</strong> ${carta.sim_nao.toUpperCase()} - ${carta.detalhe_sim_nao}</p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn btn-secondary" onclick="exibirLeituraCompleta()">← Voltar à Leitura</button>
+                </div>
+            `;
+            
+            document.getElementById('readingSection').innerHTML = html;
+        }
+
+        function gerarInterpretacaoProfunda(cartas, pergunta) {
+            let narrativa = `Analisando sua pergunta sobre '${pergunta}', a tiragem revela uma jornada significativa. `;
+            
+            cartas.forEach((carta, index) => {
+                if (index === 0) {
+                    narrativa += `Na essência da situação, ${carta.nome} indica um momento de ${carta.significado}. `;
+                } else if (index === 1) {
+                    narrativa += `O desafio atual com ${carta.nome} requer atenção a ${carta.significado}. `;
+                } else {
+                    narrativa += `A direção apontada por ${carta.nome} sugere um caminho de ${carta.significado}. `;
+                }
+            });
+            
+            narrativa += `A conexão entre essas cartas cria uma narrativa única sobre seu caminho espiritual e prático.`;
+            
+            return narrativa;
+        }
+
+        function gerarMensagemSimNao(carta, pergunta) {
+            if (carta.sim_nao === "sim") {
+                return `O universo apoia sua jornada em relação a '${pergunta}'. Proceda com confiança e coragem.`;
+            } else if (carta.sim_nao === "não") {
+                return `Em relação a '${pergunta}', o universo sugere paciência e reflexão. Talvez seja necessário reconsiderar alguns aspectos.`;
+            } else {
+                return `Sobre '${pergunta}', a resposta depende de fatores em movimento. Observe os sinais e confie em sua intuição.`;
+            }
+        }
+
+        function novaLeitura() {
+            document.getElementById('readingSection').style.display = 'none';
+            document.getElementById('questionSection').style.display = 'block';
+            document.getElementById('questionInput').value = perguntaAtual;
+            document.getElementById('questionInput').focus();
+        }
+
+        function voltarMenu() {
+            document.getElementById('readingSection').style.display = 'none';
+            document.getElementById('questionSection').style.display = 'none';
+            document.getElementById('questionInput').value = '';
+            tipoLeituraAtual = '';
+        }
+
+        // Permitir Enter para submeter a pergunta
+        document.getElementById('questionInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                iniciarLeitura();
+            }
+        });
+    </script>
+</body>
+</html>
